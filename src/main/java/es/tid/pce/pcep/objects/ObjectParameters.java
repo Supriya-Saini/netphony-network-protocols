@@ -48,6 +48,7 @@ public class ObjectParameters {
 	public static final int PCEP_OBJECT_CLASS_UNREACH_DESTINATION=28;
 	public static final int PCEP_OBJECT_CLASS_SERO=29;
 	public static final int PCEP_OBJECT_CLASS_SRRO=30;
+	public static final int PCEP_OBJECT_CLASS_UNKNOWN = 247;
 
 	//PCEP Object classes from draft-ietf-pce-inter-layer-ext-04.txt NOT SUPPORTED YET!!!
 	// NUMBERS FOR INTERNAL USE ONLY THEY DONT FOLLOW THE DRAFT as they use already existing numbers!!!!
@@ -129,6 +130,7 @@ public class ObjectParameters {
 	public static final int PCEP_OBJECT_TYPE_LSPA = 1;
 	public static final int PCEP_OBJECT_TYPE_IRO = 1;
 	public static final int PCEP_OBJECT_TYPE_SVEC = 1;
+	public static final int PCEP_OBJECT_TYPE_UNKNOWN = 1;
 	public static final int PCEP_OBJECT_TYPE_NOTIFICATION = 1;
 	public static final int PCEP_OBJECT_TYPE_PCEPERROR = 1;
 	public static final int PCEP_OBJECT_TYPE_LOADBALANCING = 1;
@@ -325,7 +327,7 @@ public class ObjectParameters {
 	/**
 	 * TLVs
 	 */
-	public static final int PCEP_TLV_TYPE_NO_PATH_VECTOR=60; 
+	public static final int PCEP_TLV_TYPE_NO_PATH_VECTOR=0x01;
 	public static final int PCEP_TLV_OVERLOADED_DURATION=0x02;
 	public static final int PCEP_TLV_REQ_MISSING_TLV=0x03;
 	public static final int PCEP_TLV_OF_LIST_TLV=4;

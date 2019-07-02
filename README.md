@@ -34,6 +34,7 @@ Detailed CHANGELOG [click here](CHANGELOG)
 - BPG-LS Tested with Juniper MX routers
 - Various bugfixes in BGP-LS
 - 5GEX extensions to carry IT information in BGP-LS (propietary)
+- Added UnknownObject(Admin Group) to Pcep Request
 
 ## Compilation and use
 
