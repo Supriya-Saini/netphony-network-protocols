@@ -76,10 +76,7 @@ import org.slf4j.LoggerFactory;
  * 
 **/
 public class PCEPRequest extends PCEPMessage {
-	/**
-	 * Admin Group.
-	 */
-	private UnknownObject adminGroup;
+
 	/**
 	 * List of optional SVEC Objects
 	 */
@@ -149,10 +146,7 @@ public class PCEPRequest extends PCEPMessage {
 			RequestList.get(i).encode();
 			len=len+RequestList.get(i).getLength();
 		}
-		if(adminGroup!=null){
-			adminGroup.encode();
-			len=len+adminGroup.getLength();
-		}
+
 		this.setMessageLength(len);		
 		messageBytes=new byte[len];
 		encodeHeader();
@@ -174,10 +168,7 @@ public class PCEPRequest extends PCEPMessage {
 			System.arraycopy(RequestList.get(i).getBytes(), 0, messageBytes, offset, RequestList.get(i).getLength());
 			offset=offset+RequestList.get(i).getLength();		
 		}
-		if(adminGroup!=null){
-			System.arraycopy(adminGroup.getBytes(),0,messageBytes,offset,adminGroup.getLength());
-			offset=offset+adminGroup.getLength();
-		}
+
 
 	}
 	
@@ -232,27 +223,12 @@ public class PCEPRequest extends PCEPMessage {
 				return;
 			}
 		}
-		if(oc==ObjectParameters.PCEP_OBJECT_CLASS_UNKNOWN){
-			try{
-				adminGroup=new UnknownObject(bytes,offset);
-			}catch (MalformedPCEPObjectException e) {
-				log.warn("Malformed Unknown Object found");
-				throw new PCEPProtocolViolationException();
-			}
-			offset=offset+adminGroup.getLength();
-		}
+
 		if (RequestList.size()==0){
 			throw new PCEPProtocolViolationException();
 		}
 	}
 
-	public UnknownObject getAdminGroup() {
-		return adminGroup;
-	}
-
-	public void setAdminGroup(UnknownObject adminGroup) {
-		this.adminGroup = adminGroup;
-	}
 
 	public void addRequest(Request request){
 		this.RequestList.add(request);		
@@ -302,9 +278,6 @@ public class PCEPRequest extends PCEPMessage {
 	public String toString(){
 		StringBuffer sb=new StringBuffer(RequestList.size()*100);
 		sb.append("REQ MESSAGE: ");
-		if(adminGroup!=null){
-			sb.append(adminGroup);
-		}
 		if (monitoring!=null){
 			sb.append("<MON>");
 		}
@@ -321,8 +294,6 @@ public class PCEPRequest extends PCEPMessage {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result
-				+ ((adminGroup == null) ? 0 : adminGroup.hashCode());
 		result = prime * result
 				+ ((RequestList == null) ? 0 : RequestList.hashCode());
 		result = prime * result
@@ -363,11 +334,7 @@ public class PCEPRequest extends PCEPMessage {
 				return false;
 		} else if (!pccReqId.equals(other.pccReqId))
 			return false;
-		if (adminGroup == null) {
-			if (other.adminGroup != null)
-				return false;
-		} else if (!adminGroup.equals(other.adminGroup))
-			return false;
+
 		return true;
 	}
 	

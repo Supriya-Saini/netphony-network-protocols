@@ -51,6 +51,10 @@ public class Request extends PCEPConstruct{
 	private InterLayer interLayer;
 	private SwitchLayer switchLayer;
 	private ReqAdapCap reqAdapCap;
+	/**
+	 * Admin Group.
+	 */
+	private UnknownObject adminGroup;
 	
 	/**
 	 * Reservation Object //OPTIONAL AND TEMPORAL!!
@@ -148,6 +152,10 @@ public class Request extends PCEPConstruct{
 			reqAdapCap.encode();
 			len=len+reqAdapCap.getLength();
 		}
+		if(adminGroup!=null){
+			adminGroup.encode();
+			len=len+adminGroup.getLength();
+		}
 		this.setLength(len);
 		bytes=new byte[len];
 		int offset=0;
@@ -206,8 +214,11 @@ public class Request extends PCEPConstruct{
 		if (reqAdapCap!=null){
 			System.arraycopy(reqAdapCap.getBytes(), 0, bytes, offset, reqAdapCap.getLength());
 			offset=offset+reqAdapCap.getLength();
-		}	
-
+		}
+		if(adminGroup!=null){
+			System.arraycopy(adminGroup.getBytes(),0,bytes,offset,adminGroup.getLength());
+			offset=offset+adminGroup.getLength();
+		}
 	}
 
 	/**
@@ -544,11 +555,33 @@ public class Request extends PCEPConstruct{
 				return;
 			}
 		}
+		oc=PCEPObject.getObjectClass(bytes, offset);
+		if(oc==ObjectParameters.PCEP_OBJECT_CLASS_UNKNOWN){
+			try{
+				adminGroup=new UnknownObject(bytes,offset);
+			}catch (MalformedPCEPObjectException e) {
+				log.warn("Malformed Unknown Object found");
+				throw new PCEPProtocolViolationException();
+			}
+			offset=offset+adminGroup.getLength();
+			len=len+adminGroup.getLength();
+			if (offset>=max_offset){
+				this.setLength(len);
+				return;
+			}
+		}
 		this.setLength(len);
 		
 	}
 
-		
+	public UnknownObject getAdminGroup() {
+		return adminGroup;
+	}
+
+	public void setAdminGroup(UnknownObject adminGroup) {
+		this.adminGroup = adminGroup;
+	}
+
 	public RequestParameters getRequestParameters() {
 		return requestParameters;
 	}
@@ -556,6 +589,7 @@ public class Request extends PCEPConstruct{
 	public void setRequestParameters(RequestParameters requestParameters) {
 		this.requestParameters = requestParameters;
 	}
+
 	public EndPoints getEndPoints() {
 		return endPoints;
 	}
@@ -718,6 +752,9 @@ public class Request extends PCEPConstruct{
 		if (switchLayer!=null){
 			sb.append(switchLayer.toString());
 		}
+		if(adminGroup!=null){
+			sb.append(adminGroup.toString());
+		}
 		return sb.toString();
 	}
 	
@@ -736,6 +773,7 @@ public class Request extends PCEPConstruct{
 		req.setInterLayer(this.interLayer);
 		req.setSwitchLayer(this.switchLayer);
 		req.setReservation(this.reservation);
+		req.setAdminGroup(this.adminGroup);
 		return req;
 	}
 
@@ -772,6 +810,8 @@ public class Request extends PCEPConstruct{
 		result = prime * result
 				+ ((switchLayer == null) ? 0 : switchLayer.hashCode());
 		result = prime * result + ((xro == null) ? 0 : xro.hashCode());
+		result = prime * result
+				+ ((adminGroup == null) ? 0 : adminGroup.hashCode());
 		return result;
 	}
 
@@ -853,6 +893,11 @@ public class Request extends PCEPConstruct{
 			if (other.xro != null)
 				return false;
 		} else if (!xro.equals(other.xro))
+			return false;
+		if (adminGroup == null) {
+			if (other.adminGroup != null)
+				return false;
+		} else if (!adminGroup.equals(other.adminGroup))
 			return false;
 		return true;
 	}
